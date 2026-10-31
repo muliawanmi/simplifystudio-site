@@ -10,7 +10,7 @@
 :root{--bg:#0f172a;--surface:#1e293b;--card:#2a3a52;--accent:#22d3ee;--accent2:#a855f7;--text:#f1f5f9;--muted:#94a3b8;--green:#4ade80;--radius:12px}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 
@@ -23,12 +23,36 @@ nav ul{display:flex;gap:28px;list-style:none}
 nav ul a{color:var(--muted);font-size:14px;font-weight:500;transition:color .2s}
 nav ul a:hover{color:var(--text);text-decoration:none}
 
-/* Hero */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px 80px;background:radial-gradient(ellipse at 50% 20%,rgba(34,211,238,.08),transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(168,85,247,.06),transparent 50%)}
+/* Hero with animated background */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 600px 400px at 20% 30%,rgba(34,211,238,.12),transparent),
+  radial-gradient(ellipse 500px 500px at 80% 20%,rgba(168,85,247,.1),transparent),
+  radial-gradient(ellipse 400px 300px at 60% 80%,rgba(74,222,128,.08),transparent),
+  radial-gradient(ellipse 300px 300px at 10% 80%,rgba(251,146,60,.06),transparent);
+  animation:heroShift 12s ease-in-out infinite alternate}
+@keyframes heroShift{0%{transform:scale(1) translate(0,0)}50%{transform:scale(1.1) translate(-20px,10px)}100%{transform:scale(1.05) translate(10px,-15px)}}
+.hero .grid-bg{position:absolute;inset:0;background-image:
+  linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%)}
+.hero .floats{position:absolute;inset:0;pointer-events:none}
+.hero .float{position:absolute;border-radius:50%;filter:blur(40px);opacity:.15;animation:floatMove 8s ease-in-out infinite alternate}
+.float-1{width:200px;height:200px;background:var(--accent);top:15%;left:10%;animation-delay:0s}
+.float-2{width:160px;height:160px;background:var(--accent2);top:60%;right:10%;animation-delay:2s}
+.float-3{width:120px;height:120px;background:var(--green);bottom:20%;left:40%;animation-delay:4s}
+.float-4{width:100px;height:100px;background:#fb923c;top:30%;right:25%;animation-delay:1s}
+@keyframes floatMove{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-30px) scale(1.15)}}
+.hero>*{position:relative;z-index:1}
 .hero h1{font-size:clamp(36px,6vw,64px);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:16px}
 .hero h1 .accent{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{font-size:18px;color:var(--muted);max-width:520px;margin-bottom:32px}
 .hero .cta{display:inline-flex;gap:12px}
+.hero .stats{display:flex;gap:40px;margin-top:48px}
+.hero .stat{text-align:center}
+.hero .stat .num{font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .stat .label{font-size:13px;color:var(--muted)}
+
 .btn{display:inline-block;padding:12px 28px;border-radius:999px;font-weight:600;font-size:15px;transition:transform .2s,box-shadow .2s}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(34,211,238,.25);text-decoration:none}
@@ -45,38 +69,31 @@ section{padding:80px 20px}
 .games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
 .game-card{background:var(--card);border-radius:var(--radius);overflow:hidden;transition:transform .2s,box-shadow .2s;border:1px solid rgba(255,255,255,.06)}
 .game-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
-.game-card .banner{height:200px;background:linear-gradient(135deg,#1a3a27,#0d4a3a);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.game-card .banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(74,222,128,.15),transparent 60%)}
-.game-card .banner img{width:120px;height:120px;border-radius:24px;box-shadow:0 8px 24px rgba(0,0,0,.5);position:relative;z-index:1}
-.game-card .info{padding:20px}
-.game-card h3{font-size:20px;font-weight:700;margin-bottom:6px}
+.game-card .banner{height:220px;background:linear-gradient(135deg,#1a3a27,#0d4a3a);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.game-card .banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(74,222,128,.2),transparent 60%),radial-gradient(circle at 70% 60%,rgba(34,211,238,.1),transparent 50%)}
+.game-card .banner img{width:130px;height:130px;border-radius:28px;box-shadow:0 12px 32px rgba(0,0,0,.6);position:relative;z-index:1;transition:transform .3s}
+.game-card:hover .banner img{transform:scale(1.08)}
+.game-card .info{padding:24px}
+.game-card h3{font-size:22px;font-weight:700;margin-bottom:4px}
+.game-card h3 a{color:var(--text)}
+.game-card h3 a:hover{color:var(--accent)}
 .game-card .genre{color:var(--accent);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
-.game-card p{color:var(--muted);font-size:14px;margin-bottom:14px}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
+.game-card p{color:var(--muted);font-size:14px;margin-bottom:16px}
+.game-card .store-link{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;background:linear-gradient(135deg,var(--green),#16a34a);color:#000;font-weight:600;font-size:13px;transition:transform .2s}
+.game-card .store-link:hover{transform:translateY(-2px);text-decoration:none}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .tag{padding:4px 10px;border-radius:999px;background:rgba(34,211,238,.1);color:var(--accent);font-size:12px;font-weight:500}
 
 /* Features list */
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:16px}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:16px}
 .feature{padding:14px;background:var(--surface);border-radius:8px;border:1px solid rgba(255,255,255,.04)}
-.feature .icon{font-size:24px;margin-bottom:6px}
-.feature h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.feature .icon{font-size:22px;margin-bottom:4px}
+.feature h4{font-size:14px;font-weight:600;margin-bottom:3px}
 .feature p{font-size:13px;color:var(--muted)}
 
-/* Contact */
-.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
-.contact-card{background:var(--surface);border-radius:var(--radius);padding:28px;border:1px solid rgba(255,255,255,.06)}
-.contact-card h3{font-size:18px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.contact-card p{color:var(--muted);font-size:14px;margin-bottom:16px}
-.contact-card a.link{color:var(--accent);font-weight:500}
-
-/* Legal pages */
-.legal{max-width:760px;margin:0 auto;padding-top:100px}
-.legal h1{font-size:28px;margin-bottom:6px}
-.legal .date{color:var(--muted);font-size:14px;margin-bottom:32px}
-.legal h2{font-size:19px;margin:28px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08)}
-.legal p,.legal li{font-size:15px;margin-bottom:10px}
-.legal ul{padding-left:24px;margin-bottom:14px}
-.legal li{margin-bottom:6px}
+/* Contact section (brief) */
+.contact-brief{text-align:center;padding:60px 20px}
+.contact-brief p{color:var(--muted);font-size:16px;margin-bottom:20px}
 
 /* Footer */
 footer{background:var(--surface);padding:32px 20px;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
@@ -88,6 +105,7 @@ footer a{color:var(--accent)}
 nav ul{gap:16px}
 nav ul a{font-size:13px}
 .hero{padding:100px 16px 60px}
+.hero .stats{gap:24px}
 section{padding:60px 16px}
 }
 </style>
@@ -99,7 +117,7 @@ section{padding:60px 16px}
 <div class="logo">Simplify<span>Studio</span></div>
 <ul>
 <li><a href="#portfolio">Games</a></li>
-<li><a href="#contact">Contact</a></li>
+<li><a href="contact.html">Contact</a></li>
 <li><a href="privacy.html">Privacy</a></li>
 <li><a href="terms.html">Terms</a></li>
 </ul>
@@ -108,11 +126,23 @@ section{padding:60px 16px}
 
 <!-- HERO -->
 <section class="hero" id="home">
+<div class="floats">
+<div class="float float-1"></div>
+<div class="float float-2"></div>
+<div class="float float-3"></div>
+<div class="float float-4"></div>
+</div>
+<div class="grid-bg"></div>
 <h1>We Build <span class="accent">Fun Games</span><br>& Apps</h1>
 <p>Simplify Studio creates colorful, engaging mobile games that bring joy to players around the world.</p>
 <div class="cta">
 <a href="#portfolio" class="btn btn-primary">Our Games</a>
-<a href="#contact" class="btn btn-outline">Contact Us</a>
+<a href="contact.html" class="btn btn-outline">Contact Us</a>
+</div>
+<div class="stats">
+<div class="stat"><div class="num">1</div><div class="label">Games</div></div>
+<div class="stat"><div class="num">4</div><div class="label">Zones</div></div>
+<div class="stat"><div class="num">17+</div><div class="label">Skins</div></div>
 </div>
 </section>
 
@@ -125,12 +155,15 @@ section{padding:60px 16px}
 <div class="games-grid">
 <div class="game-card">
 <div class="banner">
+<a href="https://play.google.com/store/apps/details?id=com.steal.egg.escape.runner" target="_blank">
 <img src="assets/steal-egg-icon.png" alt="Steal Egg Escape Runner">
+</a>
 </div>
 <div class="info">
 <div class="genre">3D Action Runner</div>
-<h3>Steal Egg Escape Runner</h3>
+<h3><a href="https://play.google.com/store/apps/details?id=com.steal.egg.escape.runner" target="_blank">Steal Egg Escape Runner</a></h3>
 <p>Steal eggs from monster nests, escape through epic 3D zones, hatch rare pets, and unlock 17+ unique character skins in the ultimate egg runner adventure!</p>
+<a class="store-link" href="https://play.google.com/store/apps/details?id=com.steal.egg.escape.runner" target="_blank">▶ Get it on Google Play</a>
 <div class="features">
 <div class="feature">
 <div class="icon">🥚</div>
@@ -163,7 +196,6 @@ section{padding:60px 16px}
 <p>Limited-time events with exclusive golden eggs and prizes</p>
 </div>
 </div>
-<div style="margin-top:16px">
 <div class="tags">
 <span class="tag">Free to Play</span>
 <span class="tag">Android</span>
@@ -175,45 +207,20 @@ section{padding:60px 16px}
 </div>
 </div>
 </div>
-</div>
 
 </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-<div class="section-inner">
-<h2 class="section-title">Contact Us</h2>
-<p class="section-sub">We're here to help with support, feedback, and inquiries</p>
-
-<div class="contact-grid">
-<div class="contact-card">
-<h3>📧 General Support</h3>
-<p>Questions about our games? Bug reports? Feature requests? We'd love to hear from you.</p>
-<a class="link" href="mailto:simplifystd@gmail.com">simplifystd@gmail.com</a>
-</div>
-<div class="contact-card">
-<h3>🗑️ Account Deletion</h3>
-<p>Want to delete your account and all associated data? You can do this directly in-game via <strong>Settings → Delete Account</strong>, or email us with your registered email address.</p>
-<a class="link" href="mailto:simplifystd@gmail.com?subject=Account%20Deletion%20Request">Request Account Deletion</a>
-</div>
-<div class="contact-card">
-<h3>⚠️ Complaints & Reports</h3>
-<p>Found inappropriate content or have a complaint? We take all reports seriously and will respond within 48 hours.</p>
-<a class="link" href="mailto:simplifystd@gmail.com?subject=Complaint%20Report">Submit a Report</a>
-</div>
-<div class="contact-card">
-<h3>🤝 Business Inquiries</h3>
-<p>Interested in partnerships, collaborations, or press inquiries? Let's talk.</p>
-<a class="link" href="mailto:simplifystd@gmail.com?subject=Business%20Inquiry">Get in Touch</a>
-</div>
-</div>
-</div>
+<!-- CONTACT BRIEF -->
+<section class="contact-brief" id="contact">
+<h2 class="section-title">Need Help?</h2>
+<p>Support, account deletion, complaints, or business inquiries</p>
+<a href="contact.html" class="btn btn-primary">Contact Us</a>
 </section>
 
 <!-- FOOTER -->
 <footer>
-<p>&copy; 2026 Simplify Studio. All rights reserved. &nbsp;|&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms.html">Terms & Conditions</a></p>
+<p>&copy; 2026 Simplify Studio. All rights reserved. &nbsp;|&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms.html">Terms & Conditions</a> &nbsp;|&nbsp; <a href="contact.html">Contact</a></p>
 </footer>
 
 </body>
